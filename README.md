@@ -41,7 +41,7 @@ Las historias de usuario se originan a partir de posibles usuarios. Por esta raz
 
 7. Consulta nro.7
 
-![Consulta 7](public/utilities/ImgReadme/item7.png)
+![Consulta 7](public/utilities/ImgReadme/Item7.png)
 
 8. Consulta nro. 8
 
