@@ -47,8 +47,8 @@ const createUser = async (req, res) => {
             return res.status(400).json({ error: emailValidation.error });
         }
 
-        const createUser = new User ({ username, password, email }); // Crea un nuevo usuario
-        await createUser.save(); // Guarda el usuario en la base de datos
+        const newUser = new User({ username, password, email }); // Crea un nuevo usuario
+        await newUser.save(); // Guarda el usuario en la base de datos
         res.status(201).json({ message: 'Usuario creado con éxito', user: newUser });
         //console.log(req.body)
     } catch (error) {
@@ -83,7 +83,8 @@ const updateUser = async (req, res) => {
             user.email = email;
         }
 
-        await user.save();
+        await User.save();
+        //user.save();
         res.json({ message: "Usuario actualizado con éxito", user });
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -106,3 +107,10 @@ const deleteUser = async (req, res) => {
 };
 
 export { getUsers, getUserByUsername, createUser, updateUser, deleteUser };
+export const methods = {
+    getUsers,
+    getUserByUsername,
+    createUser,
+    updateUser,
+    deleteUser
+}

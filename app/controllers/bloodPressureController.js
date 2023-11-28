@@ -1,16 +1,27 @@
 import { validateBloodPressure, validateDate, validateTime } from '../../validations.js';
-//import BloodPressure from './models/BloodPressure';
+import Blood from '../models/bloodPressureSchema.js';
+
 
 const otherController = (req, res) => {
-    const username = req.session.username; // Accede al username almacenado en la sesión
-        console.log(username);
-        res.json({ message: "Conectó el username del inicio de sesión con bloodPresureController!!!", username: username }); 
+    const username = req.session.username; // Accede al username almacenado en la sesión    
+    console.log(username);
+    res.json({ message: "Conectó el username del inicio de sesión con bloodPresureController!!!", username: username }); 
+};
+
+const getBloodPressure = async (req, res) => {
+    try {
+        const blood = await Blood.find(); // Usa el modelo de usuario para buscar blood Pressure
+        res.status(200).json(blood);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
 
 const getBloodPressureByUsername = async (req, res) => {
-    const username = req.params.username;
+    
+    const username = req.params.user;
     try {   
-        const blood = await BloodPressure.find({ username });
+        const blood = await Blood.find({ username });
         if (blood.length === 0) {
             return res.status(404).json({ error: "Usuario no encontrado." });
         } else{
@@ -22,7 +33,7 @@ const getBloodPressureByUsername = async (req, res) => {
 };
 
 const createBloodPressure = async (req, res) => {
-    const { username, systolic, diastolic, date, time } = req.body;
+    const { systolic, diastolic, date, time } = req.body;
 
     if (!systolic || !diastolic || !date || !time) {
         return res.status(400).json({ error: "Faltan campos obligatorios del registro de presion arterial." });
@@ -48,18 +59,21 @@ const createBloodPressure = async (req, res) => {
         return res.status(400).json({ error: timeValidation.error });
     }
 
-    const newBlood = {
-        username: username,
+    const user = req.session.username; 
+
+    const newBlood = new Blood({
+        user: user,
         systolic: systolic,
         diastolic: diastolic,
         date: date,
         time: time
-    };
+    });
     try {
         await newBlood.save();
         res.json({ message: "Registro cargado con éxito", blood: newBlood });
     } catch (error) {
         res.status(500).json({ error: 'Error en el servidor' });
+        console.log(error);
     }
 };
 
@@ -68,7 +82,7 @@ const updateBloodPressure = async (req, res) => {
     const { systolic, diastolic, date, time } = req.body;
 
     try {
-        let blood = await BloodPressure.findOne({ username });
+        let blood = await Blood.findOne({ username });
         if (!blood) {
             return res.status(404).json({ error: "Usuario no encontrado." });
         }
@@ -80,12 +94,12 @@ const updateBloodPressure = async (req, res) => {
             if (!systolicValidation.isValid) {
                 return res.status(400).json({ error: systolicValidation.error });
             }
-            blood.systolic = systolic;
+            Blood.systolic = systolic;
         }
         if (diastolic) {
-            const diastolicValidation = validateBloodPressure(diastolic);
-            if (!diastolicValidation.isValid) {
-                return res.status(400).json({ error: diastolicValidation.error });
+            const dyastolicValidation = validateBloodPressure(diastolic);
+            if (!dyastolicValidation.isValid) {
+                return res.status(400).json({ error: dyastolicValidation.error });
             }
             blood.diastolic = diastolic;
         }
@@ -113,7 +127,7 @@ const updateBloodPressure = async (req, res) => {
 const deleteBlood = async (req, res) => {
     const username = req.params.username;
     try {
-        const blood = await BloodPressure.findOneAndDelete({ username });
+        const blood = await Blood.findOneAndDelete({ username });
         if (!blood) {
             return res.status(404).json({ error: "Usuario no encontrado." });
         }
@@ -125,6 +139,7 @@ const deleteBlood = async (req, res) => {
 
 export {
     otherController,
+    getBloodPressure,
     getBloodPressureByUsername,
     createBloodPressure,
     updateBloodPressure,

@@ -1,6 +1,7 @@
 import express from 'express';
 import { 
     otherController,
+    getBloodPressure,
     getBloodPressureByUsername,
     createBloodPressure,
     updateBloodPressure,
@@ -9,7 +10,8 @@ import {
 
 const bloodPressureRouter = express.Router();
 
-bloodPressureRouter.get("/", otherController);
+bloodPressureRouter.get("/", getBloodPressure);
+bloodPressureRouter.get("/other", otherController);
 bloodPressureRouter.get("/:username", getBloodPressureByUsername);
 bloodPressureRouter.post("/", createBloodPressure);
 bloodPressureRouter.put("/:username", updateBloodPressure);
