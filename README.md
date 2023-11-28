@@ -57,23 +57,23 @@ De la información obtenida podemos validar la factibilidad de nuestro proyecto 
 
 ### HTML
 
-¡Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet libero dictumst, rhoncus pharetra donec orci bibendum praesent cum hendrerit congue velit, posuere dictum nostra fringilla nulla dui maecenas tincidunt molestie.
+HTML, siglas en inglés de HyperText Markup Language (‘lenguaje de marcado de hipertexto’), hace referencia al lenguaje de marcado para la elaboración de páginas web.
 
 ### CSS
 
-¡Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet libero dictumst, rhoncus pharetra donec orci bibendum praesent cum hendrerit congue velit, posuere dictum nostra fringilla nulla dui maecenas tincidunt molestie.
+CSS (Cascading Style Sheets), es un lenguaje de diseño gráfico para definir y crear la presentación de un documento estructurado escrito en un lenguaje de marcado.​ Es muy usado para establecer el diseño visual de los documentos web, e interfaces de usuario escritas en HTML
 
 ### JavaScript
 
-¡Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet libero dictumst, rhoncus pharetra donec orci bibendum praesent cum hendrerit congue velit, posuere dictum nostra fringilla nulla dui maecenas tincidunt molestie.
+JavaScript (abreviado comúnmente JS) es un lenguaje de programación interpretado, dialecto del estándar ECMAScript. Se define como orientado a objetos, basado en prototipos, imperativo, débilmente tipado y dinámico. Se utiliza principalmente del lado del cliente, implementado como parte de un navegador web permitiendo mejoras en la interfaz de usuario y páginas web dinámicas​ y JavaScript del lado del servidor (Server-side JavaScript o SSJS). Su uso en aplicaciones externas a la web, por ejemplo en documentos PDF, aplicaciones de escritorio (mayoritariamente widgets) es también significativo.
 
 ### NODE
 
-¡Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet libero dictumst, rhoncus pharetra donec orci bibendum praesent cum hendrerit congue velit, posuere dictum nostra fringilla nulla dui maecenas tincidunt molestie.
+Es un entorno en tiempo de ejecución multiplataforma, de código abierto, para la capa del servidor (pero no limitándose a ello) basado en el lenguaje de programación JavaScript, asíncrono, con E/S de datos en una arquitectura orientada a eventos y basado en el motor V8 de Google.
 
-### BASE DE DATOS
+### BASE DE DATOS (MongoDB)
 
-¡Lorem ipsum dolor sit amet consectetur adipiscing elit imperdiet libero dictumst, rhoncus pharetra donec orci bibendum praesent cum hendrerit congue velit, posuere dictum nostra fringilla nulla dui maecenas tincidunt molestie.
+Es un sistema de base de datos NoSQL, orientado a documentos y de código abierto. En lugar de guardar los datos en tablas, tal y como se hace en las bases de datos relacionales, MongoDB guarda estructuras de datos BSON (una especificación similar a JSON) con un esquema dinámico, haciendo que la integración de los datos en ciertas aplicaciones sea más fácil y rápida.
 
 ## 4. Consideraciones generales
 
