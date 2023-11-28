@@ -17,39 +17,39 @@ Las historias de usuario se originan a partir de posibles usuarios. Por esta raz
 
 1. Consulta nro. 1
 
-![Consulta 1](/utilities/ImgReadme/Item1.png)
+![Consulta 1](public/utilities/ImgReadme/Item1.png)
 
 2.  Consulta nro.2
 
-![Consulta 2](/utilities/ImgReadme/Item2.png)
+![Consulta 2](public/utilities/ImgReadme/Item2.png)
 
 3. Consulta nro.3
 
-![Consulta 3](/utilities/ImgReadme/item3.png)
+![Consulta 3](public/utilities/ImgReadme/item3.png)
 
 4. Consulta nro.4  
 
-![Consulta 4](/utilities/ImgReadme/item4.png)
+![Consulta 4](public/utilities/ImgReadme/item4.png)
 
 5. Consulta nro.5
 
-![Consulta 5](/utilities/ImgReadme/item5.png)
+![Consulta 5](public/utilities/ImgReadme/item5.png)
 
 6. Consulta nro. 6
 
-![Consulta 6](/utilities/ImgReadme/item6.png)
+![Consulta 6](public/utilities/ImgReadme/item6.png)
 
 7. Consulta nro.7
 
-![Consulta 7](/utilities/ImgReadme/item7.png)
+![Consulta 7](public/utilities/ImgReadme/item7.png)
 
 8. Consulta nro. 8
 
-![Consulta 8](/utilities/ImgReadme/item8.png)
+![Consulta 8](public/utilities/ImgReadme/item8.png)
 
 9.  Consulta nro.9
 
-![Consulta 9](/utilities/ImgReadme/item9.png)
+![Consulta 9](public/utilities/ImgReadme//item9.png)
 
 De la información obtenida podemos validar la factibilidad de nuestro proyecto de desarrollo Web "Mi Cuidado Diario".
 
@@ -84,7 +84,10 @@ De la información obtenida podemos validar la factibilidad de nuestro proyecto 
 # MiCuidadoDiario
 # Karelis Montenegro
 # Beatriz Maldonado
-
+# Carla Sarabia
+# Eliécer Ache
+# Asiul Rosillo
+# Germán Oquendo
 
 
 El dia 28/11/2023 12:22 BUENOS AIRES se crea el repositorio https://github.com/CARLASARABIAP/mIcIUDADOdIARIO.git
