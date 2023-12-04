@@ -1,14 +1,14 @@
 import express from 'express';
 import { fileURLToPath } from 'url';
 import path from 'path';
-import usersRouter from './app/routes/userRoutes.js';
-import authRouter from './app/routes/authRoutes.js';
+import userRoutes from './app/routes/userRoutes.js';
+import authRoutes from './app/routes/authRoutes.js';
 import bloodPressureRouter from './app/routes/bloodPressureRoutes.js';
-import checkRouter from './app/routes/checkListRoutes.js';
 import dotenv from 'dotenv';
+import bodyParser from 'body-parser';
 import session from 'express-session';
 import cookieParser from 'cookie-parser';
-import cors from "cors";
+import cors from "cors";//Asiul
 import { connectDB } from './config/database.js'; // Importa connectDB desde database.js
 
 
@@ -16,6 +16,7 @@ const app = express();
 const port = process.env.PORT || 3002;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
 
 app.use(cors());
 app.use(express.json());
@@ -34,42 +35,33 @@ connectDB(); // Conecta a la base de datos
 
 dotenv.config();
 
-//ruta para que muestre home page
 app.get('/', (req, res) => {
     const filePath = path.join(__dirname, "./public/pages/home.html");
     res.sendFile(filePath);
 });
 
-//ruta para usuarios
-app.use('/users', usersRouter);
 
-//app.post("/createUser", (req, res) => {
-    //const filePath = path.join(__dirname, "./public/home.html");
-    //const filePath = path.join(__dirname, "./public/pages/register.html");
-    //res.sendFile(req.body);
-//});
+app.post("/createUser", (req, res) => {
+    const filePath = path.join(__dirname, "./public/pages/register.html");
+    res.sendFile(filePath);
 
-//ruta para que muestre home registrer
-app.get("/loginUser/getUserByUsername", (req, res) => {
+        
+
+});
+
+app.use('/users', userRoutes);
+
+
+app.post("/loginUser", (req, res) => {
     const filePath = path.join(__dirname, "./public/pages/login.html");
-    res.send(req.body);
+    res.sendFile(filePath);
         
 });
 
-//ruta para inicio y cierre de sesión
-app.use('/users', authRouter);
+app.use('/users', authRoutes);
 
-//enlace para frontend
-app.post("/getUsers/loginUser", (req, res) => {
-    const filePath = path.join(__dirname, "./public/pages/login.html");
-    res.send(req.body);
-});
 
-//ruta para Blood Pressure
 app.use('/bloodPressure', bloodPressureRouter);
-
-//ruta para CheckList
-app.use('/checklist', checkRouter);
 
 //Manejo de errores
 app.use((req, res, next) => {
@@ -85,3 +77,15 @@ app.use((err, req, res, next) => {
 app.listen(port, () => {
     console.log(`La aplicación está funcionando en http://localhost:${port}`);
 });
+
+
+/*
+// Aquí se define un objeto con un usuario. Nótese que aquí debería estar conectada la base de datos.
+let user = {
+    id: "yellow",
+    email: "cischass@gmail.com",
+    password: "adsdasdfasdfasdfasdf"
+}
+// El mensaje que define la constante JWT_SECRET puede ser cualquier cadena de texto, ej.: "tucolorfavorito".
+// Esta constante reemplaza el uso de la librería bcrypt, aunque es más recomendable usar esta última. Por esto mismo,
+*/

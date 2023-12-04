@@ -2,6 +2,8 @@ import express from 'express';
 import fs from 'fs';
 import bodyParser from 'body-parser';
 
+
+
 // Validar la longitud del username
 function validateUsername(username) {
     if (username.length < 5 || username.length > 15) {
