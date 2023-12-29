@@ -82,12 +82,10 @@ Es un sistema de base de datos NoSQL, orientado a documentos y de código abiert
 
 
 # MiCuidadoDiario
-# Karelis Montenegro
-# Beatriz Maldonado
-# Carla Sarabia
-# Eliécer Ache
-# Asiul Rosillo
-# Germán Oquendo
+# Karelis Montenegro - FrontEnd
+# Beatriz Maldonado - FrontEnd
+# Carla Sarabia - BackEnd
+# Eliécer Ache - BackEnd
+# Asiul Rosillo - BackEnd
+# Germán Oquendo - Tester
 
-
-El dia 28/11/2023 12:22 BUENOS AIRES se crea el repositorio https://github.com/CARLASARABIAP/mIcIUDADOdIARIO.git

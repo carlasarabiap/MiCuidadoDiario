@@ -3,7 +3,6 @@ import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 import cookieParser from 'cookie-parser';
 import session from 'express-session';
-//import { authenticateToken } from './app/middleware/authenticateToken.js'; Asiul
 import User from '../models/userSchema.js'; // Importa el modelo de usuario
 import nodemailer from 'nodemailer';
 import { google } from 'googleapis';
@@ -17,6 +16,8 @@ const generateAccessToken = (user) => {
 };
 
 const loginUser = async (req, res) => {
+    let success = 300;
+    let loginUsername = '';
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username }); // Usa el modelo de usuario para buscar el usuario
@@ -29,31 +30,46 @@ const loginUser = async (req, res) => {
                 // Almacenar el token en una cookie
                 res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
                 console.log(token);
-                res.status(200).json({ message:'Sesión Iniciada', username: user.username }); // Envía el token al cliente
+                //al conectar con el front no se envía este res.status
+                //res.status(200).json({ message:'Sesión Iniciada', username: user.username }); // Envía el token al cliente
+                success = 200;
+                console.log("authController.js", success);
+                loginUsername = user.username;
+                console.log("authController.js", loginUsername);
             } else {
-                res.status(401).json({ error: 'Username o Password incorrecto' });
+                //res.status(404).json({ error: 'Username o Password incorrecto' });
+                success = 400;
             }
         } else{
-            res.status(404).json({ error: 'Usuario no encontrado' });
+            //res.status(404).json({ error: 'Usuario no encontrado' });
+            success = 400;
         }
     } catch (error) {
-        res.status(500).json({ error: 'Error en el servidor' });
+        //res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
     }
+    return {loginUsername, success};
 };
 
 const logoutUser = (req, res) => {
+    let success = 300;
     // Eliminar la cookie de token
     res.clearCookie('token');
 
-    res.status(200).json({ message: 'Sesión Cerrada' });
+    //res.status(200).json({ message: 'Sesión Cerrada' });
+    console.log('authController:60 "Se cerró la sesión"')
+    success = 200;
+    return success;
 }; 
 
 const getUserFromToken = (req, res, next) => {
+    let success = 300;
     // Obtener el token de la cookie o de la cabecera de la solicitud
     const token = req.cookies.token || req.headers.authorization;
 
     if (!token) {
-        return res.status(401).json({ error: 'Token no proporcionado' });
+        //return res.status(501).json({ error: 'Token no proporcionado' });
+        success = 500;
     }
 
     try {
@@ -67,7 +83,8 @@ const getUserFromToken = (req, res, next) => {
         const user = User.findByUsername(username);
 
         if (!user) {
-            return res.status(401).json({ error: 'Usuario no encontrado' });
+            //res.status(401).json({ error: 'Usuario no encontrado' });
+            success = 400;
         }
 
         // Añadir el usuario al objeto de solicitud para que esté disponible en otros controladores
@@ -76,7 +93,8 @@ const getUserFromToken = (req, res, next) => {
         // Llamar a next() para pasar al siguiente controlador
         next();
     } catch (error) {
-        return res.status(401).json({ error: 'Token inválido' });
+        //return res.status(501).json({ error: 'Token inválido' });
+        success = 500;
     }
 };
 
@@ -128,10 +146,12 @@ const forgotPassword = async (req, res, next) => {
     const oAuth2Client = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, REDIRECT_URI)
     oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN })
     
+    let success = 300;
     //Hay que comprobar que el usuario existe
     if(email !== User.email || username !== User.username){
-        res.send('Usuario no registrado')
-        return;
+        //res.send('Usuario no registrado')
+        //return
+        success = 400;
     } else {
         //Si el usuario existe, se le envía un link de 15 minutos de vigencia para reestablecer contraseña
         //El objeto payload permite diseñar los campos necesarios para definir el email y el id de usuario
@@ -151,6 +171,7 @@ const forgotPassword = async (req, res, next) => {
         sendMail().then(result=> console.log('Correo enviado', result))
         .catch(error => console.log(error.message));
     };
+    return success;
 };
 
 const getResetPasswordByIdToken = async (req, res) => {
@@ -162,7 +183,7 @@ const getResetPasswordByIdToken = async (req, res) => {
         res.send("Usuario inválido");
         return
     } else{
-        //De tener un usuario válido, se llama a la cosntante secret
+        //De tener un usuario válido, se llama a la constante secret
         const secret = JWT_SECRET + User.password;
         try {
             const payload = jwt.verify(token, secret);

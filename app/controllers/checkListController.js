@@ -1,91 +1,250 @@
-import Check from '../models/checkListSchema.js';
+import { validateDate } from '../../validations.js'
+import { checkHC , checkEA } from '../models/checkListSchema.js';
 
-const otherController = (req, res) => {
-    const username = req.session.username; // Accede al username almacenado en la sesión    
-    console.log(username);
-    res.json({ message: "Conectó el username del inicio de sesión con checkListController!!!", username: username }); 
-};
 
-const createCheckList = async (req, res) => {
-    //const { question1, question2, /* Agrega los demás campos del formulario */ } = req.body;
-    const { question1, question2} = req.body;
-    const user = req.session.username;
-    console.log(user);
-    // Crea una instancia del modelo de Checklist
-    const newChecklist = new Check({
-        user:user,
-        question1:question1,
-        question2:question2,
-    }); 
+const createCheckListHigiene = async (req, res) => {
+    let success = 300; 
     try {
-        await newChecklist.save();
-        console.log(user);
-        res.json({ message: "Checklist guardado exitosamente", question1, question2 });
+        const { date, ...HCquestions } = req.body;
+
+        if (date) {
+            const dateValidation = validateDate(date);
+            const HCquestionsWithStrings = {};
+                for (const key in HCquestions) {
+                    const value = HCquestions[key];
+                    if (Array.isArray(value)) {
+                        HCquestionsWithStrings[key] = value[1] || '';
+                    } else {
+                        HCquestionsWithStrings[key] = value || '';
+                    }
+                }
+
+            if (dateValidation.isValid ) {
+                const user = req.session.username;
+                const questions = HCquestionsWithStrings;
+                const newChecklistHC = new checkHC({
+                    user,
+                    date,
+                    ...questions
+                });
+                console.log("checkListController.js:36", newChecklistHC);
+                console.log("checkListController.js:37 - Antes de await newChecklistEA.save()");
+                await newChecklistHC.save();
+                //res.json({ message: "Checklist guardado exitosamente", date, ...HCquestions });
+                console.log("checkListController.js:40 - Se guardó el registro");
+                success = 200;
+            } else { 
+                //return res.status(400).json({ error: "Faltan campos obligatorios del checkList de Higiene y Confort." });
+                success = 400;
+            }
+        }   
     } catch (error) {
-        // Envía una respuesta de error si ocurre algún problema al guardar
-        res.status(500).json({ error: 'Error al guardar el checklist' });
+        //res.status(500).json({ error: 'Error al guardar el checklist' });
+        success = 500;
     }
+    return success;
 };
 
-const getCheckList = async (req, res) => {
+const getCheckListHigiene = async (req, res) => {
+    let success = 300;
     try {
-        const check = await Check.find(); // Usa el modelo de usuario para buscar blood Pressure
+        const check = await checkHC.find(); // Usa el modelo de usuario para buscar blood Pressure
         res.status(200).json(check);
+        success = 200;
     } catch (error) {
         res.status(500).json({ message: error.message });
+        success = 500;
     }
+    return success;
 };
 
-const getCheckListByUsername = async (req, res) => {   
-    const username = req.params.user;
-    try {   
-        const check = await Check.find({ username });
+const getCheckListHigieneByUsername = async (req, res) => {   
+    let success = 300;
+    const user = req.session.username;
+    console.log("bloodPressureController.js:65", user);
+    try {      
+        const check = await checkHC.find({ user });
         if (check.length === 0) {
             return res.status(404).json({ error: "Usuario no encontrado." });
+            success = 400;
         } else{
             res.json(check);
+            success = 200;
         }
     } catch (error) {
         res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
     }
+    return success;
 };
 
-const updateCheckList = async (req, res) => {
-    const username = req.params.username;
-    const { question1, question2} = req.body;
+const updateCheckListHigiene = async (req, res) => {
+    let success = 300;
+    const user = req.session.username;
+    console.log("bloodPressureController.js:65", user);
+    const { date, ...HCquestions } = req.body;
 
     try {
-        let check = await Check.findOne({ username });
+        const check = await checkHC.findOneAndUpdate({ user }, {
+            user,
+            date,
+            ...HCquestions
+        });
         if (!check) {
             return res.status(404).json({ error: "Usuario no encontrado." });
+            success = 400;
         }
-        check.question1 = question1;
-        check.question2 = question2;
         await check.save();
         res.json({ message: "Datos del check list actualizados con éxito", check });
+        success = 200;
     } catch (error) {
         res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
     }
+    return success;
 };
 
-const deleteCheckList = async (req, res) => {
-    const username = req.params.username;
+const deleteCheckListHigiene = async (req, res) => {
+    const user = req.session.username;
+    let success = 300;
     try {
-        const check = await Check.findOneAndDelete({ username });
+        const check = await checkHC.findOneAndDelete({ user });
         if (!check) {
-            return res.status(404).json({ error: "Usuario no encontrado." });
+            //return res.status(404).json({ error: "Usuario no encontrado." });
+            success = 400;
         }
-        res.json({ message: "CheckList eliminado con éxito", blood });
+        //res.json({ message: "CheckList eliminado con éxito", blood });
+        success = 200;
+    } catch (error) {
+        //res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
+    }
+    return success;
+};
+
+const createCheckListEAnimo = async (req, res) => {
+    let success = 300;
+    try {
+        const { date, ...EAquestions } = req.body;
+        
+        if (date) {
+            const dateValidation = validateDate(date);
+            const EAquestionsWithStrings = {};
+                for (const key in EAquestions) {
+                    const value = EAquestions[key];
+                    if (Array.isArray(value)) {
+                        EAquestionsWithStrings[key] = value[1] || '';
+                    } else {
+                        EAquestionsWithStrings[key] = value || '';
+                    }
+                }
+
+            if (dateValidation.isValid) {
+                const user = req.session.username;
+                const questions = EAquestionsWithStrings;
+                const newChecklistEA = new checkEA({
+                    user,
+                    date,
+                    ...questions
+                });
+
+                await newChecklistEA.save();
+                success = 200;
+            }
+        } else {
+            success = 400;
+        }
+    } catch (error) {
+        console.log(error);
+        success = 500;
+    }
+    return success;
+};
+
+const getCheckListEAnimo = async (req, res) => {
+    let success = 300;
+    try {
+        const check = await checkEA.find(); // Usa el modelo de usuario para buscar blood Pressure
+        res.status(200).json(check);
+        success = 200;
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+        success = 500;
+    }
+    return success;
+};
+
+const getCheckListEAnimoByUsername = async (req, res) => {   
+    let success = 300;
+    const user = req.session.username;
+    console.log("bloodPressureController.js:65", user);
+    try {      
+        const check = await checkEA.find({ user });
+        if (check.length === 0) {
+            return res.status(404).json({ error: "Usuario no encontrado." });
+            success = 400;
+        } else{
+            res.json(check);
+            success = 200;
+        }
     } catch (error) {
         res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
     }
+    return success;
+};
+
+const updateCheckListEAnimo = async (req, res) => {
+    const user = req.session.username;
+    const { date, ...EAquestions } = req.body;
+    let success = 300;
+    try {
+        const check = await checkEA.findOneAndUpdate({ user }, {
+            user,
+            date,
+            ...EAquestions
+        });
+        if (!check) {
+            //return res.status(404).json({ error: "Usuario no encontrado." });
+            success = 400;
+        }
+        await check.save();
+        //res.json({ message: "Datos del check list actualizados con éxito", check });
+        success = 200;
+    } catch (error) {
+        //res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
+    }
+    return success;
+};
+
+const deleteCheckListEAnimo = async (req, res) => {
+    const user = req.session.username;
+    let success = 300;
+    try {
+        const check = await checkHC.findOneAndDelete({ user });
+        if (!check) {
+            //return res.status(404).json({ error: "Usuario no encontrado." });
+            success = 400;
+        }
+        //res.json({ message: "CheckList eliminado con éxito", blood });
+        success = 200;
+    } catch (error) {
+        //res.status(500).json({ error: 'Error en el servidor' });
+        success = 500;
+    }
+    return success;
 };
 
 export { 
-    otherController,
-    createCheckList,
-    getCheckList,
-    getCheckListByUsername,
-    updateCheckList,
-    deleteCheckList
+    createCheckListHigiene,
+    getCheckListHigiene,
+    getCheckListHigieneByUsername,
+    updateCheckListHigiene,
+    deleteCheckListHigiene,
+    createCheckListEAnimo,
+    getCheckListEAnimo,
+    getCheckListEAnimoByUsername,
+    updateCheckListEAnimo,
+    deleteCheckListEAnimo
 };
