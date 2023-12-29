@@ -3,152 +3,121 @@
   <head>
     <meta charset="UTF-8" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0" >
-    <title>Tu Cuidado Diario CheckList</title>
+    <title>Mi Cuidado Diario CheckList</title>
     <link rel="stylesheet" href="./css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">       
     </head>
       <body>
-        <header class="header-landing">
-          <div class="wrap-logo">
-            <img src="./utilities/img/logo.png" alt="" class="logo-header">
-          </div>
+        <header>
+          <div class="header-landing">
+            <div class="wrap-logo">
+              <img src="./utilities/img/logo.png" alt="" class="logo-header">
+            </div>
             <nav id="main-nav">
               <ul class="menu-principal">
                 <li><img src="./utilities/img/day-and-night-256.png" alt="icono-dia-noche" class="icono-header"></li>
-                <li class="menu-item"><a href="/" onclick="route()">Home</a> </li>
+                <!--li class="menu-item"><a href="/" onclick="route()">Home</a> </li-->
                 <!--li class="menu-item"><a href="/register" onclick="route()">Registro</a> </li-->
                 <!--li class="menu-item"><a href="/login" onclick="route()">Login</a></li-->
+                <li class="menu-item"><a href="/record.html" onclick="route()">Historial</a></li>
                 <li class="menu-item"><a href="/" onclick="route()">Cierre de sesión</a></li>
                 <li class="menu-item"><a href="mailto:administrador-mcd@proton.me?subject=IPQRs%20(Inquietudes%2C%20Peticiones%2C%20Quejas%20y%20Reclamos)">Contacto</a>
               </ul>
             </nav>
-          <!--/div-->
+          </div>
         </header>
         <main class="main">
-          <section id="checkList-section">
+          <section class="checklist-section">
+            <!--picture class="main__pictureChecklist">
+              <img src="utilities/img/SignosVitales1.png" class="main__imgChecklist" alt="presión-arterial">
+            </picture-->
+            <div class="wrap-homeCL">
               <h1><strong> Mi Cuidado Diario</strong></h1>
-              <h2>¡Tu bienestar, nuestra prioridad diaria!</h2>
-              <div class="wrap-checkList-section">
-                <ul class="checklist-section"><a href="">checklist-section</a>
-                <form method="post" action="form" onsubmit="return verifyinputFormPresion()">
-                  <!--form name="inputFormPresion" onsubmit="return verifyinputFormPresion()"-->
-                    <div class="form-group">
-                      <li><p>Registro de Presión Arterial</p></li>
-                      <label for="presion-sistolica">Presión Sistólica:</label>
-                      <input class="Inputs" 
-                        type= "number"
-                        id="registroPresionS" 
-                        name="Presion arterial Sistolica" 
-                        min="50" max="400"
-                        placeholder="Escribe un número">
-                      <small>mmHg</small>
-                    </div>
-                    <div class="form-group">
-                      <label for="presion-diastolica">Presión Diastólica:</label>
-                      <input class="Inputs" 
-                        type="number"
-                        id="registroPresionD"
-                        name="Presion arterial Diastolica" 
-                        min="0" max="300"
-                        placeholder="Escribe un número">
-                      <small>mmHg</small>
-                    </div>
-                    <div class="form-group">
+              <p>Registro de Presión Arterial</p>
+            </div>
+          </section>
+          <section class="checkList-section">
+            <form id="presion-form" action="./createBloodPressure" method="post">
+                <div class="wrap-checkList-section">
+                  <div class="form-groupPA">
+                    
+                    <label for="presion-sistolica">Presión Sistólica</label>
+                    <input class="InputsChecklist" 
+                      type= "number"
+                      id="registroPresionS" 
+                      name="systolic" 
+                      min="50" max="400"
+                      placeholder="Ingresa un número">
+                    <small>mmHg</small>
+                  </div>
+                  <div class="form-groupPA">
+                    <label for="presion-diastolica">Presión Diastólica</label>
+                    <input class="InputsChecklist" 
+                      type="number"
+                      id="registroPresionD"
+                      name="diastolic" 
+                      min="0" max="300"
+                      placeholder="Ingresa un número">
+                    <small>mmHg</small>
+                  </div>
+                  <div class="form-groupPA">
                       <label for="fecha">Fecha:</label>
-                      <input class="Inputs"
+                      <input class="InputsChecklist"
                         type="date" 
                         id="fecha"
+                        name="date"
                         placeholder="dd/mm/aa"
                         required>
-                    </div>
-                    <div class="form-group">
+                  </div>
+                  <div class="form-groupPA">
                       <label for="hora">Hora:</label>
-                      <input class="Inputs"
+                      <input class="InputsChecklist"
                         type="time"
                         id="hora" 
+                        name="time"
                         placeholder="Hora"
                         required>
-                    </div>
-                    <div class="form-group">
-                      <button class="button" type="submit">Enviar</button>
-                    </div>
-                    <div id="alertadeRegistroP1"></div>
-                  <!--/form-->
-                </form>
-                <form method="post" action="form" onsubmit="return verifyinputFormPresion()">
-                  <!--form name="inputFormPresion" onsubmit="return verifyinputFormPresion()"-->
-                    <div class="form-group">
-                      <li><p>Higiene y Confort</p></li>
-                      <div>
-                      <!-- Pregunta 1 -->
-                        <div>
-                            <label for="question1">¿El cabello lo tiene limpio y peinado?</label>
-                            <input type="checkbox" name="question1" value="true" id="question1">
-                        </div>
-                        
-                    <!-- Pregunta 2 -->
-                      <div>
-                        <label for="question2">¿Se observa los ojos sin lagañas y sin secreción?</label>
-                        <input type="checkbox" name="question2" value="true" id="question2">
-                      </div>
-                      
-                      <div class="form-group">
-                        <label for="fecha">Fecha:</label>
-                        <input class="Inputs"
-                          type="date" 
-                          id="fecha"
-                          placeholder="dd/mm/aa"
-                          required>
-                      </div>
-                      <div class="form-group">
-                        <button class="button" type="submit">Enviar</button>
-                      </div>
-                      <div id="alertadeRegistroP1"></div>
-                </form>
-                    
-                <form method="post" action="form" onsubmit="return verifyinputFormPresion()">
-                  <!--form name="inputFormPresion" onsubmit="return verifyinputFormPresion()"-->
-                    <div class="form-group">
-                      <li> <p>Estado de Animo</p></li>
-                    <div>
-                        <!-- Pregunta 1 -->
-                        <div>
-                        <label for="question1">¿Ultimamente te has sentido cansado, sin alguna razón?</label>
-                        <input type="checkbox" name="question1" value="true" id="question1">
-                        </div>
-                        <!-- Pregunta 2 -->
-                        <div>
-                        <label for="question2">¿Recientemente te has sentido deprimido?</label>
-                        <input type="checkbox" name="question2" value="true" id="question2">
-                        </div>
-                      
-                        <div class="form-group">
-                          <label for="fecha">Fecha:</label>
-                          <input class="Inputs"
-                            type="date" 
-                            id="fecha"
-                            placeholder="dd/mm/aa"
-                            required>
-                        </div>
-                        <div class="form-group">
-                          <button class="button" type="submit">Enviar</button>
-                        </div>
-                        <div id="alertadeRegistroP1"></div>
-                  </form>
-                </div>
-              </ul>
-                <p> Una característica destacada de Mi Cuidado Diario es el checklist, que te permite marcar las actividades que deben llevarse a cabo durante el día. Algunos ejemplos incluyen tomar la presión por la mañana y por la tarde, evaluar el estado de ánimo y la salud física del adulto mayor, así como realizar actividades de higiene y comodidad para asegurar su bienestar y tranquilidad.</p>
-              </div>
-              <div class="wrap-checkList-section">
-                <a href="" class="item-checkList-section"><img src="utilities/img/higiene.png" alt="Riesgo Fisico"><p>Higiene y Confort</p></a>
-                <a href="" class="item-checkList-section"><img src="utilities/img/saludMentalAdultoMayor1.png" alt="Riesgo Psicológico"><p>Estado de Animo</p></a>
-                <a href="" class="item-checkList-section"><img src="utilities/img/SignosVitales1.png" alt="Signos Vitales"><p>Presión Arterial (SV)</p></a>
-              </div>
+                  </div>
+                  <!-- <div class="form-groupPA">
+                    <button class="button"
+                      id="presion" 
+                      type="submit" 
+                      value="Enviar">Guardar</button>
+                  </div> -->
+
+                  <div class="form-groupPA">
+                    <button class="button" 
+                      id="presion" 
+                      type="submit" 
+                      value="Enviar">Enviar
+                    </button>
+                  </div>
+                <div>
+            </form>
+            <div>
+              <p> Ingresa a tu perfil  Checklist de:</p>
+            </div>
+            <div class="wrap-checkList-section">
+              <a href="checkListHC" class="item-checkList-section"><img src="utilities/img/higiene.png" alt="Riesgo Fisico"><p>Higiene y Confort</p></a>
+              <a href="checkListEA" class="item-checkList-section"><img src="utilities/img/saludMentalAdultoMayor1.png" alt="Riesgo Psicológico"><p>Estado de Animo</p></a>
+              <a href="record" class="item-checkList-section"><img src="utilities/img/SignosVitales1.png" alt="Signos Vitales"><p>Estadisticas</p></a>
+              
+            </div>
           </section>
         </main>
-        <script src="main1.js"></script>
+        <div class="cierreSecion" >
+        <button class="button"  type="button" onclick="logoutUser()">Cerrar sesión</button>
+        </div>
+        <script>
+          function enviarDatos() {
+            // Cambiar el texto del botón
+            document.querySelector('.button').textContent = 'Datos cargados';
+            // Inhabilitar el botón después de hacer clic
+            document.getElementById('enviarBtn').disabled = true;
+          }
+        </script>        
         <footer class="footer-section">
           <div class="footer-creds">
             <h3>©Copyright 2023 - Team Black 1.</h3>
@@ -160,4 +129,4 @@
           </div>
         </footer>
       </body>
-</html>        
+</html> 

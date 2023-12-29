@@ -1,6 +1,5 @@
 import express from 'express';
-import fs from 'fs';
-import bodyParser from 'body-parser';
+import moment from 'moment';
 
 
 
@@ -45,8 +44,7 @@ function validateEmail(email) {
     };
 }
 
-const validateBloodPressure = (bloodPressure) => {
-    const { systolic, diastolic } = bloodPressure;
+const validateBloodPressure = (systolic, diastolic) => {
     if (systolic <= 0 || diastolic <= 0) {
         return {
             isValid: false,
@@ -66,15 +64,19 @@ const validateBloodPressure = (bloodPressure) => {
 
 const validateDate = (date) => {
     const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-    const isValidDate = dateRegex.test(date);
 
-    if (!isValidDate) {
+    // Validar la fecha utilizando Moment.js
+    const dateNew = moment(date, 'DD/MM/YYYY', true);
+    const isValidDateFormat = dateRegex.test(date);
+    
+    if (isValidDateFormat || dateNew.isValid()) {
         return {
             isValid: false,
-            error: "La fecha proporcionada no es válida."
+            error: "La fecha proporcionada no es válida. Debe seguir el formato DD/MM/YYYY."
         };
     }
 
+    const newDate = dateNew.format('YYYY/MM/DD');
     return {
         isValid: true
     };
