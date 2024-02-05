@@ -51,10 +51,10 @@ const createBloodPressure = async (req, res) => {
             const timeValidation = validateTime(time);
             console.log("bloodPressureController:51", timeValidation);
             const diastolicSystolicValidation = validateBloodPressure(systolic, diastolic);
-            console.log("bloodPressureController:58", diastolicSystolicValidation);
+            console.log("bloodPressureController:54", diastolicSystolicValidation);
             
             
-            if (diastolicSystolicValidation & dateValidation.isValid & timeValidation.isValid) {
+            if (diastolicSystolicValidation.isValid & dateValidation.isValid & timeValidation.isValid) {
                 const user = req.session.username; 
                 const newBlood = new Blood({
                     user: user,
@@ -87,63 +87,33 @@ const updateBloodPressure = async (req, res) => {
     let success = 300;
 
     try {
-        let blood = await Blood.findOne({ username });
+        const blood = await Blood.findOne({ user, date, time });
         if (!blood) {
             return res.status(404).json({ error: "Usuario no encontrado." });
             success = 400;
         }
-        if (!systolic && !diastolic && !date && !time) {
+        if (!systolic && !diastolic) {
             return res.status(400).json({ error: "Se debe proporcionar al menos un campo para actualizar." });
         }
-        // if (systolic) {
-        //     const systolicValidation = validateBloodPressure(systolic);
-        //     console.log("bloodPressureController:106 - Pasó validación de Sistólica");
-        //     if (!systolicValidation.isValid) {
-        //         console.log("bloodPressureController:107 - No pasó validación de Sistólica");
-        //         return res.status(400).json({ error: systolicValidation.error });
-        //     }
-        //     Blood.systolic = systolic;
-        // }
-        // if (diastolic) {
-        //     const dyastolicValidation = validateBloodPressure(diastolic);
-        //     console.log("bloodPressureController:115 - Pasó validación de Diastólica");
-        //     if (!dyastolicValidation.isValid) {
-        //         console.log("bloodPressureController:117 - No pasó validación de Diastólica");
-        //         return res.status(400).json({ error: dyastolicValidation.error });
-        //         success = 410;
-        //     }
-        //     Blood.diastolic = diastolic;
-        // }
-        if (systolic & diastolic) {
+        if (systolic || diastolic) {
             const systolicDyastolicValidation = validateBloodPressure(systolic, diastolic);
-            console.log("bloodPressureController:125 - Pasó validación de Sistólica-Diastólica");
             if (!systolicDyastolicValidation.isValid) {
-                console.log("bloodPressureController:127 - No pasó validación de Sistólica-Diastólica");
+                console.log("bloodPressureController:101 - No pasó validación de Sistólica-Diastólica");
                 return res.status(400).json({ error: systolicDyastolicValidation.error });
                 success = 410;
             }
-            Blood.systolic = systolic;
-            Blood.diastolic = diastolic;
-        }
-        if (date) {
-            const dateValidation = validateDate(date);
-            if (!dateValidation.isValid) {
-                return res.status(400).json({ error: dateValidation.error });
-                success = 400;
+            console.log("bloodPressureController:105 - Pasó validación de Sistólica-Diastólica");
+            if (systolic) {
+                blood.systolic = systolic;
             }
-            blood.date = date;
-        }
-        if (time) {
-            const timeValidation = validateTime(time);
-            if (!timeValidation.isValid) {
-                return res.status(400).json({ error: timeValidation.error });
-                success = 400;
+
+            if (diastolic) {
+                blood.diastolic = diastolic;
             }
-            blood.time = time;
+            await blood.save();
+            res.json({ message: "Datos de presión arterial actualizados con éxito", blood });
+            success = 200;
         }
-        await blood.save();
-        res.json({ message: "Datos de presión arterial actualizados con éxito", blood });
-        success = 200;
     } catch (error) {
         res.status(500).json({ error: 'Error en el servidor' });
         success = 500;
@@ -152,10 +122,11 @@ const updateBloodPressure = async (req, res) => {
 };
 
 const deleteBlood = async (req, res) => {
-    const user = req.session.username;
+    const id = "65a40a5f91a8930b411f49ea";
     let success = 300;
     try {
-        const blood = await Blood.findOneAndDelete({ username });
+        const blood = await Blood.findOneAndDelete({ id });
+        
         if (!blood) {
             return res.status(404).json({ error: "Usuario no encontrado." });
             success = 400;
